@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"runtime"
 	"sort"
 	"strconv"
 )
@@ -96,7 +97,9 @@ func GetPoints(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filteredPoints := points.InRange(&Point{param["x"], param["y"], 0}, param["distance"])
+	runtime.Gosched()
 	sort.Sort(filteredPoints)
+	runtime.Gosched()
 
 	b, err := json.MarshalIndent(filteredPoints, "", "  ")
 	if err != nil {
